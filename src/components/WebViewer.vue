@@ -1,35 +1,41 @@
 <template>
-  <div ref="viewer"></div>
+  <div id="pageContainer">
+    <canvas id="the-canvas"></canvas>
+  </div>
 </template>
 
 <script>
-/* eslint-disable */
-import WebViewer from '@pdftron/pdfjs-express';
+import 'pdfjs-dist/web/pdf_viewer.css';
+const pdfjsLib = require('pdfjs-dist');
+pdfjsLib.GlobalWorkerOptions.workerSrc = require('pdfjs-dist/build/pdf.worker.entry.js');
 export default {
   name: 'WebViewer',
-  props: {
-    path: String,
-    url: String,
+  methods: {
+    async getPdf() {
+      let loadingTask = pdfjsLib.getDocument(
+        './sample.pdf'
+      );
+      loadingTask.promise.then((pdf) => {
+        pdf.getPage(1).then((page) => {
+          var scale = 1.5;
+          var viewport = page.getViewport({ scale: scale });
+
+          var canvas = document.getElementById('the-canvas');
+          var context = canvas.getContext('2d');
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+
+          var renderContext = {
+            canvasContext: context,
+            viewport: viewport,
+          };
+          page.render(renderContext);
+        });
+      });
+    },
   },
-  mounted: function () {
-    WebViewer(
-      {
-        path: this.path,
-        initialDoc: this.url, // replace with your own PDF file
-      },
-      this.$refs.viewer
-    ).then((instance) => {
-      // call apis here
-      console.log('sa')
-    });
-  },
+  created(){
+    this.getPdf();
+  }
 };
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-div {
-  width: 100%;
-  height: 100vh;
-}
-</style>

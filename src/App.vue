@@ -1,18 +1,18 @@
 <template>
   <div id="app">
-    <PdfViewer/>
-    <!-- <WebViewer :path="`${publicPath}lib`" url="https://pdftron.s3.amazonaws.com/downloads/pl/webviewer-demo.pdf"/> -->
+    <!-- <PdfViewer/> -->
+    <WebViewer />
   </div>
 </template>
 
 <script>
-import PdfViewer from "./components/PdfViewer";
-//import WebViewer from './components/WebViewer.vue'
+//import PdfViewer from "./components/PdfViewer";
+import WebViewer from './components/WebViewer.vue'
 export default {
   name: "App",
   components: {
-    PdfViewer,
-    //WebViewer
+    //PdfViewer,
+    WebViewer
   },
   data(){
     return {
